@@ -1,3 +1,5 @@
+from colorama import Fore
+
 all_commands = \
 '''
 Команди для контактів:
@@ -20,6 +22,7 @@ all_commands = \
  16--- - "show-user [name]" -> Виводить дані користувача
  17--- - "add-addres [name]" -> Додає адресу до користувача
  18--- - "show-addres [name]" -> Виводить адресу до користувача
+ 14 - "text_color [коляр-тексту]" -> Команда для зміни коляру
 
 Команди для нотатків:
  1 - "n [name] [coment] [notes]" -> Додавання нотаток до користувача або редагую існуючі
@@ -52,7 +55,8 @@ def main(): #Основна функція з циклом
     book = Address_Book.AddressBook() #Екземпляр класу AddressBook
     
     book.add_record(Basic_functions.load_data(Basic_functions.lincFile)) #Записую до книги декодовані дані з файлу
-    
+    default_color = Fore.RESET
+    color = default_color
     print("Welcome to the assistant bot!")
     while True: #Основний цикл для постійного запиту команд
         user_input = input("Enter a command: ") #Запитую команду
@@ -63,7 +67,7 @@ def main(): #Основна функція з циклом
             match command: #Команди
                 
                 case "hello": #Привітання
-                    print("Hello! \nHow can I help you?")
+                    print(f"{color}Hello! \nHow can I help you?")
                 
                 case "help": print(all_commands) #Команда з привітанням
                     
@@ -121,7 +125,14 @@ def main(): #Основна функція з циклом
                     Basic_functions.remove_note_user(args, book)
                 case "remove-notes-all":
                     Basic_functions.remove_user_notes_all(args, book)
-                
+                case "text_color":
+                    if len(args) == 0:
+                        color = default_color
+                    else:
+                        color = Fore.__dict__.get(args[0].upper())
+                        if color is None:
+                            color = default_color
+                    print(color)
 
             
 
